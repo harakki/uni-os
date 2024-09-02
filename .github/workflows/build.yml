@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        build_type: [Debug, Release]
+        compiler: [gcc, clang]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Cache CMake files"
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/build
+          key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt') }}-${{ matrix.build_type }}-${{ matrix.compiler }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
+
+      - name: "Configure CMake"
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DCMAKE_C_COMPILER=${{matrix.compiler}}
+
+      - name: "Build all labs"
+        run: cmake --build ${{github.workspace}}/build --config ${{matrix.build_type}} --parallel
+
+      - name: "Upload artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: ${{github.workspace}}/build
+          retention-days: 7
