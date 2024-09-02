@@ -12,10 +12,9 @@ All labs organized as follows
 .
 ├── CMakeLists.txt
 ├── README.md
-└── lab[0-13]
+└── lab[01-13]
     ├── README.md
-    └── src
-        └── ...
+    └── ... # all lab files
 ```
 
 ## Build
@@ -35,7 +34,7 @@ cmake -B build
 cmake --build build --config Release --parallel
 # --- OR ---
 # Build specific lab
-cmake --build build --config Release --target lab[1-13]
+cmake --build build --config Release --target lab[01-13]
 ```
 
 ## License
