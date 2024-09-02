@@ -1,0 +1,12 @@
+name: Check format
+
+on: [push]
+
+jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Clang Format"
+        run: find . -type f -name '*.[ch]' | xargs clang-format -i -verbose -sort-includes && git diff --exit-code
