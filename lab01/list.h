@@ -5,9 +5,8 @@
 
 // Structure for storing any data
 typedef struct {
-  int id;
-  char full_name[64];
-  int group;
+  char name[25];
+  int hex;
 } data_t;
 
 // Linked list structure
@@ -43,10 +42,10 @@ size_t size(list_t *head);
 // Delete list
 void clean(list_t *head);
 
-// Import data from CSV file
-void serialize(list_t *head, const char *filename);
+// Export data to the CSV file
+int serialize(list_t *head, const char *filename);
 
-// Export data from CSV file
-void deserialize(list_t *head, const char *filename);
+// Import data from CSV file
+int deserialize(list_t **head, const char *filename);
 
 #endif  // UNI_OS_LIST_H

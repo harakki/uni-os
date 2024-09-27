@@ -1,6 +1,8 @@
 #include "list.h"
 
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 list_t *insert(list_t *head, int element, data_t data) {
   // Create new element to insert
@@ -166,6 +168,56 @@ void clean(list_t *head) {
   }
 }
 
-void serialize(list_t *head, const char *filename) {}
+int serialize(list_t *head, const char *filename) {
+  // Open and check success of opening file descriptor
+  FILE *file = fopen(filename, "r");
+  if (file == NULL) {
+    perror("serialize:file-open:error");
+    return -1;
+  }
+  // Read all data from .csv file
+  list_t *ptr = head;
+  while (ptr != NULL) {
+    fprintf(file, "%s,%06X\n", ptr->data.name, ptr->data.hex);
+    ptr = ptr->next;
+  }
+  // Close file descriptor
+  fclose(file);
+  return 0;
+}
 
-void deserialize(list_t *head, const char *filename) {}
+int deserialize(list_t **head, const char *filename) {
+  // Open and check success of opening file descriptor
+  FILE *file = fopen(filename, "r");
+  if (file == NULL) {
+    perror("deserialize:file-open:error");
+    return -1;
+  }
+  // Clean list
+  clean(*head);
+  *head = NULL;
+  // Create array for storing readed data
+  char line[256];
+  data_t data;
+  // Read all lines of file
+  while (fgets(line, sizeof(line), file)) {
+    char *comma = strchr(line, ',');
+    // Check if string of data is valid
+    if (comma == NULL) {
+      fclose(file);
+      perror("deserialize:file-read:format-error:comma");
+      return -1;
+    }
+    // Replace comma with NULL
+    *comma = '\0';
+    // Copy new data into data structure
+    strncpy(data.name, line, sizeof(data.name) - 1);
+    data.name[sizeof(data.name) - 1] = '\0';
+    data.hex = (int)strtol(comma + 1, NULL, 16);
+    // Add data into the list
+    *head = push_back(*head, data);
+  }
+  // Close file descriptor
+  fclose(file);
+  return 0;
+}

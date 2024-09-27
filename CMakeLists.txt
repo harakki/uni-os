@@ -3,10 +3,22 @@ project(university-operating-systems)
 set(CMAKE_C_STANDARD 11)
 
 # --- LAB 1 ---
-add_library(list STATIC lab01/list.c)
-set_target_properties(list PROPERTIES PUBLIC_HEADER lab01/list.h)
+add_library(statlist STATIC lab01/list.c)
+set_target_properties(statlist PROPERTIES PUBLIC_HEADER lab01/list.h)
 add_executable(lab01 lab01/main.c)
-target_link_libraries(lab01 list)
+target_link_libraries(lab01 statlist)
 
 # --- LAB 2 ---
 add_executable(lab02 lab02/main.c)
+
+# --- LAB 3 ---
+add_executable(lab03 lab03/main.c)
+
+# --- LAB 4 ---
+add_executable(lab04 lab04/main.c)
+
+# --- LAB 5 ---
+add_library(dynlist SHARED lab01/list.c)
+set_target_properties(dynlist PROPERTIES PUBLIC_HEADER lab01/list.h)
+add_executable(lab05 lab01/main.c)
+target_link_libraries(lab05 dynlist)
