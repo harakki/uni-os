@@ -22,3 +22,14 @@ add_library(dynlist SHARED lab01/list.c)
 set_target_properties(dynlist PROPERTIES PUBLIC_HEADER lab01/list.h)
 add_executable(lab05 lab01/main.c)
 target_link_libraries(lab05 dynlist)
+
+# --- LAB 6 ---
+add_executable(lab06 lab06/main.c)
+
+# --- LAB 7 ---
+add_executable(lab07 lab07/main.c)
+target_link_libraries(lab07 dynlist)
+
+# --- LAB 8 ---
+add_executable(lab08-psx lab08/threads-posix.c)
+add_executable(lab08-std lab08/threads-std.cpp)
