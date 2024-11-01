@@ -6,7 +6,14 @@
 Elf64_Shdr get_section_header(FILE* file, Elf64_Ehdr* header, int index);
 
 int main(int argc, char** argv) {
-  const char* elf_file = argc > 1 ? argv[1] : "libdynlist.so";
+  const char* elf_file;
+  if (argc > 1) {
+    elf_file = argv[1];
+  } else {
+    fprintf(stderr, "Usage: provide path to ELF file as program argument.\n");
+    return 1;
+  }
+
   char sname[32];
 
   Elf64_Ehdr header;
@@ -31,16 +38,26 @@ int main(int argc, char** argv) {
     }
   }
 
+  // Check if symbols table is empty
+  if (symtab.sh_size == 0 || symtab.sh_entsize == 0) {
+    fclose(file);
+    return 0;
+  }
+
   for (int i = 0; i < symtab.sh_size / symtab.sh_entsize; i++) {
     fseek(file, symtab.sh_offset + symtab.sh_entsize * i, SEEK_SET);
     fread(&sym, sizeof(Elf64_Sym), 1, file);
 
-    fseek(file, strtab.sh_offset + sym.st_name, SEEK_SET);
-    fread(sname, 1, 32, file);
+    // Check if symbol type is functions
+    if (ELF64_ST_TYPE(sym.st_info) == STT_FUNC && sym.st_name != 0) {
+      fseek(file, strtab.sh_offset + sym.st_name, SEEK_SET);
+      fread(sname, 1, 32, file);
 
-    fprintf(stdout, "%d\t%ld\t%u\t%u\t%hd\t%s\n", i, sym.st_size,
-            ELF64_ST_TYPE(sym.st_info), ELF64_ST_BIND(sym.st_info),
-            sym.st_shndx, sname);
+      // Print only defined by developer functions
+      if (sym.st_shndx != SHN_UNDEF) {
+        fprintf(stdout, "%s\n", sname);
+      }
+    }
   }
   return 0;
 }

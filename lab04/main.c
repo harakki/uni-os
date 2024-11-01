@@ -14,8 +14,8 @@ void create_process(const char *program) {
 
   // Код дочернего процесса
   if (pid == 0) {
-    // Замещаем процесс новым программным образом
-    execlp(program, program, (char *)NULL);
+    // Замещаем процесс новой программой
+    execlp(program, "/dev/null", (char *)NULL);
     perror("execlp failed");
     exit(EXIT_FAILURE);
   } else {
@@ -26,9 +26,9 @@ void create_process(const char *program) {
 
 int main() {
   // Запускаем несколько программ
-  create_process("program1");
-  create_process("program2");
-  create_process("program3");
+  create_process("echo");
+  create_process("tail");
+  create_process("cat");
 
   // Ожидание завершения дочерних процессов
   while (wait(NULL) > 0);
