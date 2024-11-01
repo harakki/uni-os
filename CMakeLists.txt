@@ -33,3 +33,15 @@ target_link_libraries(lab07 dynlist)
 # --- LAB 8 ---
 add_executable(lab08-psx lab08/threads-posix.c)
 add_executable(lab08-std lab08/threads-std.cpp)
+
+# --- LAB 9 ---
+add_executable(lab09 lab09/main.c)
+
+# --- LAB 10 ---
+add_executable(lab10 lab10/main.c)
+
+# --- LAB 11 ---
+add_executable(lab11 lab11/main.c)
+
+# --- LAB 12 ---
+add_executable(lab12 lab12/main.c)
