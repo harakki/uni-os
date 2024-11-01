@@ -39,6 +39,9 @@ add_executable(lab09 lab09/main.c)
 
 # --- LAB 10 ---
 add_executable(lab10 lab10/main.c)
+add_executable(lab10-atomic lab10/atomic.cpp)
+add_executable(lab10-better-psx lab10/threads-posix.c)
+add_executable(lab10-better-std lab10/threads-std.cpp)
 
 # --- LAB 11 ---
 add_executable(lab11 lab11/main.c)
