@@ -48,3 +48,9 @@ add_executable(lab11 lab11/main.c)
 
 # --- LAB 12 ---
 add_executable(lab12 lab12/main.c)
+
+# --- COURCE WORK ---
+add_library(procinfo SHARED cw/Processes.cpp)
+set_target_properties(procinfo PROPERTIES PUBLIC_HEADER cw/Processes.h)
+add_executable(procstat cw/main.cpp)
+target_link_libraries(procstat procinfo ncurses)
