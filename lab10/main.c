@@ -1,7 +1,7 @@
 #include <pthread.h>
+#include <stdatomic.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <stdatomic.h>
 
 atomic_int sh = 0;
 
